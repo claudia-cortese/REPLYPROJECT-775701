@@ -25,8 +25,9 @@ The steps we followed are:
 
 ## METHODS
 
-Our work focused on the combination of both unsupervised and supervised learning techniques to effectively classify and evaluate image data.
-
+Our work focused on the combination of both unsupervised and supervised learning techniques to effectively classify and evaluate image data. Before delving into feature extraction, algorithms adopted and training overview, let's set up the environment.
+	
+	
 #### Environment Setup
 This project was entirely created on Google Colab. If you'd like to use Google Colab, just run the following line at the beginning of the notebook to install the required libraries.
 
@@ -43,17 +44,16 @@ to check the versions of the libraries.
 
 Here are the libraries and their respective versions:
 
-matplotlib==3.3.4
-pandas==1.1.5
-numpy==1.19.5
-seaborn==0.11.1
-tensorflow==2.4.1
-joblib==1.0.1
-Pillow==8.1.0
-scikit-image==0.18.1
-scikit-learn==0.24.2
-keras==2.4.3
-google-colab==1.0.0
+	matplotlib==3.3.4
+	pandas==1.1.5
+	numpy==1.19.5
+	seaborn==0.11.1
+	tensorflow==2.4.1
+	joblib==1.0.1
+	Pillow==8.1.0
+	scikit-image==0.18.1
+	scikit-learn==0.24.2
+	keras==2.4.3
 
 
 If you're not using Google Colab, you might want to clone the repository to your local machine:
@@ -79,9 +79,43 @@ Finally, run the Jupyter Notebook:
 jupyter notebook
 ```
 
+#### Flowchart
+
+Now that the environment s set up, we can procede to describe our ideas and the design choices. In order to do so, we begin with a flowchart that will help us visualize the steps we followed.
+
+	+----------------------------+
+			| Load & Preprocess          |
+			| Data (Images)              |
+	+----------------------------+
+            |
+            v
+	+----------------------------+
+			| Feature Extraction         |
+			| (LBP, PCA, VAE)            |
+	+----------------------------+
+            |
+            v
+	+----------------------------+
+			| Unsupervised Learning      |
+			| (K-Means Clustering)       |
+	+----------------------------+
+            |
+            v
+	+----------------------------+
+			| Supervised Learning        |
+			| (ANN Training)             |
+	+----------------------------+
+            |
+            v
+	+----------------------------+
+			| Model Evaluation           |
+			| (Metrics & Validation)     |
+	+----------------------------+
+
+
 
 #### Feature Extraction
-For what concerns the extraction of features, 
+Now that the environnment is set up, we can 
 - **Local Binary Patterns (LBP)**: A simple yet efficient texture operator that labels the pixels of an image by thresholding the neighborhood of each pixel and considering the result as a binary number.
 - **Principal Component Analysis (PCA)**: A dimensionality-reduction method that is often used to reduce the dimensionality of large data sets, by transforming the data to a new coordinate system such that the greatest variance by some projection of the data comes to lie on the first coordinates (called the principal components).
 - **Variational Autoencoders (VAE)**: A generative model that leverages neural networks to learn the underlying distribution of data in a lower-dimensional space and can be used to generate new data points.

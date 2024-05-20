@@ -1,5 +1,7 @@
 # **RESUME CLASSIFICATION**
 
+####Team Members: Rachele Cecere (775701), Claudia Cortese (785561)
+
 ## INTRODUCTION
 
 This project aims to build a model that accurately identifies the class to which each resume belongs.
@@ -18,8 +20,8 @@ The goal is to utilize one or more models to identify the various types of image
 The steps we followed are: 
 
 1) exploratory data analysis, to first inspect the dataset. Since our dataset is made of images, the features analyzed were widht, height, file size, contrast, brightness and noise level. This phase is pivotal for all the next steps of the project.
-2) preprocessing, to prepare the data for modelling. The actions taken were resizing, pixel normalization, conversion from images to numpy array, extraction of LBP features and splitting into train and test sets. It is followed by a principal component analysis to reduce the dimensionality of the features, remove noise and redundancy.
-3) modelling, to classify the resumes into four classes. The chosen models are: k-means, ANN, autoencoder and Variational Autoencoder (VAE). We performed extensive validation through cross-validation and analysis of learning curves to ensure the robustness and generalizability of the models.
+2) preprocessing, to prepare the data for modelling. The actions taken were resizing, pixel normalization, conversion from images to numpy array, extraction of LBP features and splitting into train and test sets. It was followed by a principal component analysis (PCA) to reduce the dimensionality of the features, remove noise and redundancy.
+3) modelling, to classify the resumes into four classes. The chosen models are: **k-means**, **ANN**, **autoencoder** and **Variational Autoencoder (VAE)**. We performed extensive validation through cross-validation and analysis of learning curves to ensure the robustness and generalizability of the models.
 
 
 
@@ -81,47 +83,65 @@ jupyter notebook
 
 #### Flowchart
 
-Now that the environment s set up, we can procede to describe our ideas and the design choices. In order to do so, we begin with a flowchart that will help us visualize the steps we followed.
+Now that the environment is set up, we can procede to describe our ideas and the design choices. In order to do so, we begin with a flowchart that will help us visualize the steps we followed.
 
 	+----------------------------+
-			| Load & Preprocess          |
-			| Data (Images)              |
+	| Load & EDA                 |
+	| Data (Scanned documents)   |
 	+----------------------------+
             |
             v
 	+----------------------------+
-			| Feature Extraction         |
-			| (LBP, PCA, VAE)            |
+	| Feature Extraction         |
+	| (LBP, PCA)                 |
 	+----------------------------+
             |
             v
 	+----------------------------+
-			| Unsupervised Learning      |
-			| (K-Means Clustering)       |
+	| Unsupervised Learning      |
+	| (K-Means Clustering)       |
 	+----------------------------+
             |
             v
 	+----------------------------+
-			| Supervised Learning        |
-			| (ANN Training)             |
+	| Models                     |
+	| (ANN, Autoencoder, VAE)    |
 	+----------------------------+
             |
             v
 	+----------------------------+
-			| Model Evaluation           |
-			| (Metrics & Validation)     |
+	| Model Evaluation           |
+	| (Metrics & Validation)     |
 	+----------------------------+
+
+
+#### Preprocessing choices
+
+In order to properly prepare the data for modelling, some preprocessing steps were taken. 
+First, all the images in the dataset were resized to 750x1000. In fact, the EDA showed an average width of 750 and a fixed height of 1000 for all the images. Other dimensions weren't chosen (64x64, 246x246 and so on) because they would lose too much information and since we're dealing with images containing text, it is pivotal to have high quality images.
+The images were then converted into numpy arrays to optimize the operation both on a speed and an efficiency level.
+Pixels were then normalized in the range [0,1] to help in stabilizing and accelerating the training process. Keeping the pixels to their original rage [0, 255] would have led to a slower optimization of the gradient descent.
 
 
 
 #### Feature Extraction
-Now that the environnment is set up, we can 
-- **Local Binary Patterns (LBP)**: A simple yet efficient texture operator that labels the pixels of an image by thresholding the neighborhood of each pixel and considering the result as a binary number.
-- **Principal Component Analysis (PCA)**: A dimensionality-reduction method that is often used to reduce the dimensionality of large data sets, by transforming the data to a new coordinate system such that the greatest variance by some projection of the data comes to lie on the first coordinates (called the principal components).
-- **Variational Autoencoders (VAE)**: A generative model that leverages neural networks to learn the underlying distribution of data in a lower-dimensional space and can be used to generate new data points.
+
+For what concerns feature extraction, we adopted **LBP**, Local Binary Pattern, since it is a texture descriptor that captures the local structure around each pixel. This characteristic makes it perfect for distinguishing different types of scanned documents, such as resumes. Moreover, since we have to deal with a large dataset, LBP was the right choice because it is very computationally efficient ad simple to implement. 
+Other options we took into consideration were HOG (Histogram of Oriented Gradients) or SIFT. We tried to adopt them but they were too complex and computationally expensive. 
+At this point, the dataset was split into training and test sets.
+However, it's worth to mention that LBP features can be noisy and redundant. This is why Principal Component Analysis was applied to reduce dimensionality and simplify the dataset while retaining most of the variance. 
+Another option would have been LDA (Linear Discriminant Analysis), but it requires labeled data for finding the linea combinations of features that separate classes, which is not compatible with our task.
+
+
 
 #### Algorithms
-- **K-Means Clustering**: An unsupervised learning algorithm used to partition the dataset into K distinct, non-overlapping subsets (clusters).
+We adopted a k-means clustering to partition the dataset into 4 distinct and non overlapping clusters, since it is a simple algorithm and minimizes the variance within each cluster. 
+We took into consideration DBSCAN and Hierarchical Clustering. As for DBSCAN, we'll discuss the results we obtained in the next section and why we excluded it. Hierarchical clustering was on the other hasnd too computationally expensive and not as scalable to large datasets as k-means.
+
+We then applied the k-means clustering to an ANN, since ANNs are highly flexible and capable of learning complex patterns in the data. They can effectively handle the features extracted by PCA though the use of dense layers and dropout for regularization.
+Support Vector Machines and Random Forests were alternatives we considered. However, SVMs may not scale well to large datasets like oura and Random Forests cannot learn patterns as complex as the ones ANNs can learn
+
+
 - **Artificial Neural Networks (ANN)**: A type of deep learning model that is particularly effective for tasks involving image data, used here for supervised learning to classify résumés.
 
 #### Training Overview
@@ -131,7 +151,7 @@ Now that the environnment is set up, we can
 
 
 
-### Flowchart
+
 
 
 

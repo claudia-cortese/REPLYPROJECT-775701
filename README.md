@@ -151,7 +151,7 @@ Support Vector Machines and Random Forests were alternatives we considered. Howe
 
 ## Experimental Design
 
-In this section, we describe the experiments conducted to demonstrate and validate the contributions of our project. We focused on comparing different feature extraction methods and clustering algorithms, as well as evaluating the performance of supervised learning models.
+In this section, we describe the experiments conducted to demonstrate and validate the contributions of our project. We focused on comparing different feature extraction methods and clustering algorithms, as well as evaluating the performance of supervised learning models. 
 
 #### Experiment 1: PCA-based Clustering and Classification
 
@@ -259,11 +259,12 @@ In this section, we describe the experiments conducted to demonstrate and valida
 
 **Figure 1: t-SNE Visualization of Clusters**
 
-
+![t-SNE Visualization of Clusters](images/t-sne_visualization_of_clusters.png)
 
 
 **Figure 2: Confusion Matrix for ANN Classification**
 
+![Confusion Matrix](images/confusion_matrix.png)
 
 
 **Table 1: Clustering Metrics Comparison**

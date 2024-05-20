@@ -257,14 +257,20 @@ In this section, we describe the experiments conducted to demonstrate and valida
 #### Figures and Tables
 
 
-**Figure 1: t-SNE Visualization of Clusters**
+**Figure 1: t-SNE Visualization of Encoded-features-based Clusters**
 
 ![t-SNE Visualization of Clusters](images/t-sne_visualization_of_clusters.png)
 
+This t-SNE visualization indicates a well-structured latent space and significant features contributing to the clustering. The clustering seems to be effectively capturing the underlying patterns in the data.
 
-**Figure 2: Confusion Matrix for ANN Classification**
+
+**Figure 2: Confusion Matrix for PCA-based  ANN Classification**
 
 ![Confusion Matrix](images/confusion_matrix.png)
+
+The confusion matrix shows that the model performs exceptionally well on the test set. Most classes have very few misclassifications, with the majority of the predicted labels matching the true labels. For instance, Class 0 has a few misclassifications (8 samples predicted as other classes), but Classes 1, 2, and 3 have very high accuracy, with almost no misclassifications.
+
+
 
 
 **Table 1: Clustering Metrics Comparison**
@@ -282,7 +288,7 @@ In this section, we describe the experiments conducted to demonstrate and valida
 
 | Feature Set       | Classification Model | Accuracy    |
 |-------------------|----------------------|-------------|
-| PCA               | ANN                  | 96.84%      |
+| PCA               | ANN                  | 97.77%      |
 | VAE               | ANN                  | 77.86%      |
 
 These results illustrate the varying strengths of different feature extraction methods. While Principal Component Analysis (PCA) demonstrated superior performance in classification tasks with a high accuracy of 96.84%, advanced models like Variational Autoencoders (VAEs) provided significant improvements in clustering tasks. VAEs, in particular, excelled at capturing complex, non-linear data structures, validating their effectiveness for tasks that require a nuanced understanding of data distributions.

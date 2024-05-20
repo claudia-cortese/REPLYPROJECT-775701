@@ -118,33 +118,39 @@ Now that the environment is set up, we can procede to describe our ideas and the
 #### Preprocessing choices
 
 In order to properly prepare the data for modelling, some preprocessing steps were taken. 
-First, all the images in the dataset were resized to 750x1000. In fact, the EDA showed an average width of 750 and a fixed height of 1000 for all the images. Other dimensions weren't chosen (64x64, 246x246 and so on) because they would lose too much information and since we're dealing with images containing text, it is pivotal to have high quality images.
-The images were then converted into numpy arrays to optimize the operation both on a speed and an efficiency level.
-Pixels were then normalized in the range [0,1] to help in stabilizing and accelerating the training process. Keeping the pixels to their original rage [0, 255] would have led to a slower optimization of the gradient descent.
++ First, all the images in the dataset were resized to 750x1000.
+   + In fact, the EDA showed an average width of 750 and a fixed height of 1000 for all the images. Other dimensions weren't chosen (64x64, 246x246 and so on) because they would lose too much information and since we're dealing with images containing text, it is pivotal to have high quality images.
++ The images were then converted into numpy arrays to optimize the operation both on a speed and an efficiency level.
++ Pixels were then normalized in the range [0,1] to help in stabilizing and accelerating the training process.
+  	+ Keeping the pixels to their original rage [0, 255] would have led to a slower optimization of the gradient descent.
 
 
 
 #### Feature Extraction
 
-For what concerns feature extraction, we adopted **LBP**, Local Binary Pattern, since it is a texture descriptor that captures the local structure around each pixel. This characteristic makes it perfect for distinguishing different types of scanned documents, such as resumes. Moreover, since we have to deal with a large dataset, LBP was the right choice because it is very computationally efficient ad simple to implement. 
-Other options we took into consideration were HOG (Histogram of Oriented Gradients) or SIFT. We tried to adopt them but they were too complex and computationally expensive. 
-At this point, the dataset was split into training and test sets.
-However, it's worth to mention that LBP features can be noisy and redundant. This is why Principal Component Analysis was applied to reduce dimensionality and simplify the dataset while retaining most of the variance. 
-Another option would have been LDA (Linear Discriminant Analysis), but it requires labeled data for finding the linea combinations of features that separate classes, which is not compatible with our task.
-We moved to more advanced models, such as autoencoders and Variational Autoencoder.
-Autoencoders are neural networks designed to learn a compressed representation of the input data. By training an autoencoder to reconstruct the input data from a lower-dimensional encoding, we can capture important features and reduce dimensionality. They are more flexible than PCA and can capture non-linear relationships, which is a big limit of PCA.
-We also applied a variational autoencoder (VAE) to capture complex, non-linear relationships in the data. This way, meaningful and compact feature representatios are generated, improving clustering and classification performance. 
-While autoencoders can also learn a lower-dimensional representation, VAEs were chosen for their ability to enforce a continuous and smooth latent space, which is beneficial for clustering tasks.
+1) For what concerns feature extraction, we adopted **LBP**, Local Binary Pattern, since it is a texture descriptor that captures the local structure around each pixel.
+   - This characteristic makes it perfect for distinguishing different types of scanned documents, such as resumes.
+   - Moreover, since we have to deal with a large dataset, LBP was the right choice because it is very computationally efficient ad simple to implement.
+   - Other options we took into consideration were HOG (Histogram of Oriented Gradients) or SIFT. We tried to adopt them but they were too complex and computationally expensive. 
+2) At this point, the dataset was split into training and test sets.
+3) However, it's worth to mention that LBP features can be noisy and redundant. This is why Principal Component Analysis was applied to reduce dimensionality and simplify the dataset while retaining most of the variance.
+   - Another option would have been LDA (Linear Discriminant Analysis), but it requires labeled data for finding the linea combinations of features that separate classes, which is not compatible with our task.
+4) We moved to more advanced models, such as autoencoders and Variational Autoencoder.
+   - Autoencoders are neural networks designed to learn a compressed representation of the input data. By training an autoencoder to reconstruct the input data from a lower-dimensional encoding, we can capture important features and reduce dimensionality.
+   - They are more flexible than PCA and can capture non-linear relationships, which is a big limit of PCA.
+5) We also applied a variational autoencoder (VAE) to capture complex, non-linear relationships in the data. This way, meaningful and compact feature representatios are generated, improving clustering and classification performance.
+   - While autoencoders can also learn a lower-dimensional representation, VAEs were chosen for their ability to enforce a continuous and smooth latent space, which is beneficial for clustering tasks.
 
 
 
 
 #### Algorithms
-We applied a k-means clustering to both the LBP, PCA, autoencoder and VAE features to partition the dataset into 4 distinct and non overlapping clusters, since it is a simple yet effective algorithm that minimizes the variance within each cluster. It is also easy to implement and computationally efficient.
-We took into consideration DBSCAN and Hierarchical Clustering. As for DBSCAN, the results obtained by its application were mediocre and not as good as k-means. Hierarchical clustering was on the other hand too computationally expensive and not as scalable to large datasets as k-means.
+- We applied a k-means clustering to both the LBP, PCA, autoencoder and VAE features to partition the dataset into 4 distinct and non overlapping clusters, since it is a simple yet effective algorithm that minimizes the variance within each cluster. It is also easy to implement and computationally efficient.
+- We took into consideration DBSCAN and Hierarchical Clustering. As for DBSCAN, the results obtained by its application were mediocre and not as good as k-means.
+	- Hierarchical clustering was on the other hand too computationally expensive and not as scalable to large datasets as k-means.
 
-We then trained an ANN, first to PCA features and then to VAE features, since ANNs are highly flexible and capable of learning complex patterns in the data. They can effectively handle the features extracted by PCA though the use of dense layers and dropout for regularization.
-Support Vector Machines and Random Forests were alternatives we considered. However, SVMs may not scale well to large datasets like oura and Random Forests cannot learn patterns as complex as the ones ANNs can learn.
+- We then trained an ANN, first to PCA features and then to VAE features, since ANNs are highly flexible and capable of learning complex patterns in the data. They can effectively handle the features extracted by PCA though the use of dense layers and dropout for regularization.
+	- Support Vector Machines and Random Forests were alternatives we considered. However, SVMs may not scale well to large datasets like oura and Random Forests cannot learn patterns as complex as the ones ANNs can learn.
 
 
 

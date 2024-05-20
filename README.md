@@ -65,6 +65,20 @@ Then, navigate to the repository directory:
 ```bash
 cd REPLYPROJECT-775701
 ```
+ Install the required libraries using pip:
+```bash
+pip install -r requirements.txt
+```
+Alternatively, if you are using Conda, you can create an environment using the `environment.yml` file:
+  ```bash
+  conda env create -f environment.yml
+  conda activate resume_classification
+  ```
+Finally, run the Jupyter Notebook:
+```bash
+jupyter notebook
+```
+
 
 #### Feature Extraction
 For what concerns the extraction of features, 

@@ -15,13 +15,11 @@ The four classes identified are:
 - research resumes, that include meticulous descriptions of research projects and methodologies and comprehensive lists of publications and patents;
 - leadership resumes, that emphasize sections that include leadership roles, business metrics and keynote speeches.
 
-The goal is to utilize one or more models to identify the various types of images within the dataset.
-
 The steps we followed are: 
 
-1) exploratory data analysis, to first inspect the dataset. Since our dataset is made of images, the features analyzed were widht, height, file size, contrast, brightness and noise level. This phase is pivotal for all the next steps of the project.
-2) preprocessing, to prepare the data for modelling. The actions taken were resizing, pixel normalization, conversion from images to numpy array, extraction of LBP features and splitting into train and test sets. It was followed by a principal component analysis (PCA) to reduce the dimensionality of the features, remove noise and redundancy.
-3) modelling, to classify the resumes into four classes. The chosen models are: **k-means**, **ANN**, **autoencoder** and **Variational Autoencoder (VAE)**. We performed extensive validation through cross-validation and analysis of learning curves to ensure the robustness and generalizability of the models.
+1) Exploratory Data Analysis, to first inspect the dataset. Since our dataset is made of images, the features analyzed were widht, height, file size, contrast and brightness. This phase is pivotal for all the next steps of the project.
+2) Preprocessing, to prepare the data for modelling. The actions taken were resizing, pixel normalization, conversion from images to numpy array, extraction of LBP features and splitting into train and test sets. It was followed by a principal component analysis (PCA) to further reduce the dimensionality of the features.
+3) Modelling, to classify the resumes into four classes. The chosen models are: **k-means**, **ANN**, **Autoencoder** and **Variational Autoencoder (VAE)**. We performed extensive validation through cross-validation and analysis of learning curves to ensure the robustness and generalizability of the models.
 
 
 
@@ -128,13 +126,13 @@ In order to properly prepare the data for modelling, some preprocessing steps we
 
 #### Feature Extraction
 
-1) For what concerns feature extraction, we adopted **LBP**, Local Binary Pattern, since it is a texture descriptor that captures the local structure around each pixel.
+1) For what concerns feature extraction, we adopted **LBP**, Local Binary Pattern, a texture descriptor that captures the local structure around each pixel.
    - This characteristic makes it perfect for distinguishing different types of scanned documents, such as resumes.
    - Moreover, since we have to deal with a large dataset, LBP was the right choice because it is very computationally efficient ad simple to implement.
    - Other options we took into consideration were HOG (Histogram of Oriented Gradients) or SIFT. We tried to adopt them but they were too complex and computationally expensive. 
 2) At this point, the dataset was split into training and test sets.
-3) However, it's worth to mention that LBP features can be noisy and redundant. This is why Principal Component Analysis was applied to reduce dimensionality and simplify the dataset while retaining most of the variance.
-   - Another option would have been LDA (Linear Discriminant Analysis), but it requires labeled data for finding the linea combinations of features that separate classes, which is not compatible with our task.
+3) However, it's worth to mention that LBP features can redundant. This is why Principal Component Analysis was applied to reduce dimensionality and simplify the dataset while retaining most of the variance.
+   - Another option would have been LDA (Linear Discriminant Analysis), but it requires labeled data for finding the linear combinations of features that separate classes, which is not compatible with our task.
 4) We moved to more advanced models, such as autoencoders and Variational Autoencoder.
    - Autoencoders are neural networks designed to learn a compressed representation of the input data. By training an autoencoder to reconstruct the input data from a lower-dimensional encoding, we can capture important features and reduce dimensionality.
    - They are more flexible than PCA and can capture non-linear relationships, which is a big limit of PCA.
@@ -150,7 +148,8 @@ In order to properly prepare the data for modelling, some preprocessing steps we
 	- Hierarchical clustering was on the other hand too computationally expensive and not as scalable to large datasets as k-means.
 
 - We then trained an ANN, first to PCA features and then to VAE features, since ANNs are highly flexible and capable of learning complex patterns in the data. They can effectively handle the features extracted by PCA though the use of dense layers and dropout for regularization.
-	- Support Vector Machines and Random Forests were alternatives we considered. However, SVMs may not scale well to large datasets like oura and Random Forests cannot learn patterns as complex as the ones ANNs can learn.
+	- LBP was not trained on the ANN since PCA performed better.
+	- Support Vector Machines and Random Forests were alternatives we considered. However, SVMs may not scale well to large datasets like ours and Random Forests cannot learn patterns as complex as the ones ANNs can learn.
 
 
 
@@ -173,17 +172,16 @@ In this section, we describe the experiments conducted to demonstrate and valida
   - **Classification Metrics**:
     - **Accuracy**: The ratio of correctly predicted instances to the total instances.
     - **Confusion Matrix**: Provides insights into the true positive, true negative, false positive, and false negative predictions.
-    - **ROC Curve and AUC**: The Receiver Operating Characteristic curve and the Area Under the Curve provide a graphical representation of the classifier's performance across different threshold values.
 
-#### Experiment 2: Autoencoder-based Clustering and Classification
+#### Experiment 2: Autoencoder-based Clustering
 
-- **Purpose**: To assess the effectiveness of traditional autoencoders in learning meaningful features for clustering and classification.
+- **Purpose**: To assess the effectiveness of traditional autoencoders in learning meaningful features for clustering.
   
-- **Baseline**: K-Means clustering on features extracted by the autoencoder and classification using an ANN trained on these features.
+- **Baseline**: K-Means clustering on features extracted by the autoencoder.
   
 - **Evaluation Metrics**:
-  - **Clustering Metrics**: Silhouette Score, Davies-Bouldin Index, and Calinski-Harabasz Index (same as for PCA-based features).
-  - **Classification Metrics**: Accuracy, Confusion Matrix, and ROC Curve and AUC (same as for PCA-based features).
+  - **Clustering Metrics**: Silhouette Score, Davies-Bouldin Index, and Calinski-Harabasz Index.
+
 
 #### Experiment 3: VAE-based Clustering and Classification
 
@@ -193,7 +191,7 @@ In this section, we describe the experiments conducted to demonstrate and valida
   
 - **Evaluation Metrics**:
   - **Clustering Metrics**: Silhouette Score, Davies-Bouldin Index, and Calinski-Harabasz Index (same as for PCA and autoencoder-based features).
-  - **Classification Metrics**: Accuracy, Confusion Matrix, and ROC Curve and AUC (same as for PCA and autoencoder-based features).
+  - **Classification Metrics**: Accuracy, Confusion Matrix.
 
 #### Experiment 4: Comparing Different Clustering Algorithms
 
@@ -227,29 +225,26 @@ In this section, we describe the experiments conducted to demonstrate and valida
 1. **PCA-based Clustering and Classification**
    - **Clustering Performance**: PCA with K-Means clustering provided moderately well-defined clusters. However, the clusters were not as distinct as those obtained with advanced models.
      - **Silhouette Score**: 0.45
-     - **Davies-Bouldin Index**: 1.15
-     - **Calinski-Harabasz Index**: 2500
-   - **Classification Performance**: The ANN trained on PCA features achieved reasonable accuracy but showed limitations in capturing complex patterns.
-     - **Accuracy**: 78%
-     - **ROC AUC**: 0.82
+     - **Davies-Bouldin Index**: 0.96
+     - **Calinski-Harabasz Index**: 2344
+   - **Classification Performance**: The ANN trained on PCA features achieved the highest accuracy but showed limitations in capturing complex patterns.
+     - **Accuracy**: 96%
+    
 
-2. **Autoencoder-based Clustering and Classification**
+2. **Autoencoder-based Clustering**
    - **Clustering Performance**: The autoencoder improved the clustering quality compared to PCA, indicating that non-linear feature extraction is beneficial.
-     - **Silhouette Score**: 0.52
-     - **Davies-Bouldin Index**: 1.05
-     - **Calinski-Harabasz Index**: 2700
-   - **Classification Performance**: The ANN trained on autoencoder features outperformed the PCA-based model, reflecting the advantage of non-linear feature extraction.
-     - **Accuracy**: 83%
-     - **ROC AUC**: 0.87
+     - **Silhouette Score**: 0.43
+   
+
 
 3. **VAE-based Clustering and Classification**
    - **Clustering Performance**: VAEs provided the best clustering results, with well-separated clusters, indicating the efficacy of probabilistic latent space representations.
-     - **Silhouette Score**: 0.62
-     - **Davies-Bouldin Index**: 0.85
-     - **Calinski-Harabasz Index**: 3100
-   - **Classification Performance**: The ANN trained on VAE features achieved the highest accuracy and robustness, demonstrating the effectiveness of VAEs in capturing complex data distributions.
-     - **Accuracy**: 90%
-     - **ROC AUC**: 0.92
+     - **Silhouette Score**: 0.53
+     - **Davies-Bouldin Index**: 0.58
+     - **Calinski-Harabasz Index**: 3993
+   - **Classification Performance**: The ANN trained on VAE features achieved reasonable accuracy but demonstrated the effectiveness of VAEs in capturing complex data distributions.
+     - **Accuracy**: 77.86%
+  
 
 4. **Comparison of Clustering Algorithms**
    - **K-Means vs. DBSCAN**: K-Means consistently outperformed DBSCAN across all feature sets. DBSCAN's performance was hampered by its sensitivity to parameter selection and inability to handle high-dimensional data effectively.
@@ -257,7 +252,6 @@ In this section, we describe the experiments conducted to demonstrate and valida
 
 5. **OCR Performance**
    - **Text Recognition**: The OCR system struggled to accurately recognize crucial text elements, resulting in low precision. This made OCR unsuitable for reliable feature extraction in this context.
-     - **Text Recognition Accuracy**: 65%
      - **Conclusion**: Due to its low accuracy, OCR was not used for further feature extraction and analysis.
 
 #### Figures and Tables
@@ -277,22 +271,21 @@ In this section, we describe the experiments conducted to demonstrate and valida
 
 | Feature Set       | Clustering Algorithm | Silhouette Score | Davies-Bouldin Index | Calinski-Harabasz Index |
 |-------------------|----------------------|------------------|----------------------|-------------------------|
-| PCA               | K-Means              | 0.45             | 1.15                 | 2500                    |
-| Autoencoder       | K-Means              | 0.52             | 1.05                 | 2700                    |
-| VAE               | K-Means              | 0.62             | 0.85                 | 3100                    |
-| PCA               | DBSCAN               | 0.30             | 1.50                 | 2000                    |
-| Autoencoder       | DBSCAN               | 0.35             | 1.40                 | 2200                    |
-| VAE               | DBSCAN               | 0.40             | 1.30                 | 2400                    |
+| PCA               | K-Means              | 0.45             | 0.96                 | 2344                    |
+| Autoencoder       | K-Means              | 0.43             |                      |                         |
+| VAE               | K-Means              | 0.53             | 0.58                 | 3993                    |
+| PCA               | DBSCAN               | 0.42             | 1.55                 | 31.37                   |
+| LBP               | DBSCAN               | -0.25            | 2.59                 | 182.1                   |
 
-**Table 2: Classification Metrics Comparison**
 
-| Feature Set       | Classification Model | Accuracy | ROC AUC |
-|-------------------|----------------------|----------|---------|
-| PCA               | ANN                  | 78%      | 0.82    |
-| Autoencoder       | ANN                  | 83%      | 0.87    |
-| VAE               | ANN                  | 90%      | 0.92    |
+**Table 2: Classification Metrics Comparison on Test Data**
 
-These results illustrate the significant improvements achieved by using advanced models like autoencoders and VAEs for feature extraction. VAEs, in particular, demonstrated superior performance in both clustering and classification tasks, validating their effectiveness in capturing complex data structures.
+| Feature Set       | Classification Model | Accuracy    |
+|-------------------|----------------------|-------------|
+| PCA               | ANN                  | 96.84%      |
+| VAE               | ANN                  | 77.86%      |
+
+These results illustrate the varying strengths of different feature extraction methods. While Principal Component Analysis (PCA) demonstrated superior performance in classification tasks with a high accuracy of 96.84%, advanced models like Variational Autoencoders (VAEs) provided significant improvements in clustering tasks. VAEs, in particular, excelled at capturing complex, non-linear data structures, validating their effectiveness for tasks that require a nuanced understanding of data distributions.
 
 
 
@@ -300,11 +293,26 @@ These results illustrate the significant improvements achieved by using advanced
 
 #### Summary
 
-Our work demonstrates that advanced feature extraction methods, specifically Variational Autoencoders (VAEs), significantly enhance the performance of both clustering and classification tasks compared to traditional methods like PCA. By leveraging the power of VAEs to capture complex, non-linear relationships in the data, we achieved better-defined clusters and higher classification accuracy. The results clearly show that VAEs provide a more robust and expressive feature representation, which translates to improved performance across various machine learning tasks.
+
+Our study aimed to compare the effectiveness of different feature extraction methods, specifically Local Binary Patterns (LBP), Principal Component Analysis (PCA), and Variational Autoencoders (VAEs), and the impact of PCa and VAE on clustering and classification tasks using an Artificial Neural Network (ANN) model. 
+The results provided insights into the strengths and limitations of each method in different contexts.
+
+
+PCA-based Model:
+
+The ANN model trained on PCA features achieved a high classification accuracy of 96.84%. This demonstrates PCA's effectiveness in linearly reducing the dimensionality of data while retaining most of the variance. PCA's ability to simplify the data without losing critical information makes it highly suitable for tasks requiring high classification accuracy. However, PCA's limitation lies in its assumption of linearity, which may not capture more complex, non-linear relationships in the data. 
+
+VAE-based Model:
+
+The ANN model trained on VAE features achieved a classification accuracy of 77.86%. It has to be considered though, that VAEs can capture complex and non-linear relationships within the data, which represents a limit of PCAs. Therefore, while VAE features did not outperform PCA in classification accuracy, they can still be valuable for tasks that require capturing more complex data distributions.
+
+
+In summary, the PCA-based Model achieved the highest accuracy. Moreover, by displaying samples from each cluster we can visually observe a clear distinction between clusters and similarity in layout characteristics within each cluster. The study highlights that PCA is highly effective for tasks requiring high classification accuracy due to its strength in linear dimensionality reduction. 
+
 
 #### Future Work and Open Questions
 
-While our study highlights the effectiveness of VAEs, several questions remain unanswered and present opportunities for future research. One such question is the scalability of VAEs and their performance on much larger datasets. Additionally, the impact of different network architectures and hyperparameters on the performance of VAEs warrants further investigation. Future work could explore the integration of other advanced models, such as Generative Adversarial Networks (GANs), and the application of semi-supervised learning techniques to further enhance feature extraction and classification performance. Moreover, improving the precision of OCR systems and integrating text-based features could provide a more comprehensive approach to document analysis and classification.
+While our study highlights the effectiveness of PCA, several questions remain unanswered and present opportunities for future research. One such question is the scalability of VAEs and their performance on much larger datasets. Additionally, the impact of different network architectures and hyperparameters on the performance of VAEs warrants further investigation. Future work could explore the integration of other advanced models, such as Generative Adversarial Networks (GANs), and the application of semi-supervised learning techniques to further enhance feature extraction and classification performance. Moreover, improving the precision of OCR systems and integrating text-based features could provide a more comprehensive approach to document analysis and classification.
 
 
 

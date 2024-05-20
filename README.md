@@ -294,7 +294,7 @@ These results illustrate the varying strengths of different feature extraction m
 #### Summary
 
 
-Our study aimed to compare the effectiveness of different feature extraction methods, specifically Local Binary Patterns (LBP), Principal Component Analysis (PCA), and Variational Autoencoders (VAEs), and the impact of PCa and VAE on clustering and classification tasks using an Artificial Neural Network (ANN) model. 
+Our study aimed to compare the effectiveness of different feature extraction methods, specifically Local Binary Patterns (LBP), Principal Component Analysis (PCA), and Variational Autoencoders (VAEs), and the impact of PCA and VAE on clustering and classification tasks using an Artificial Neural Network (ANN) model. 
 The results provided insights into the strengths and limitations of each method in different contexts.
 
 
@@ -307,7 +307,7 @@ VAE-based Model:
 The ANN model trained on VAE features achieved a classification accuracy of 77.86%. It has to be considered though, that VAEs can capture complex and non-linear relationships within the data, which represents a limit of PCAs. Therefore, while VAE features did not outperform PCA in classification accuracy, they can still be valuable for tasks that require capturing more complex data distributions.
 
 
-In summary, the PCA-based Model achieved the highest accuracy. Moreover, by displaying samples from each cluster we can visually observe a clear distinction between clusters and similarity in layout characteristics within each cluster. The study highlights that PCA is highly effective for tasks requiring high classification accuracy due to its strength in linear dimensionality reduction. 
+In summary, the PCA-based Model achieved the highest accuracy. Moreover, by displaying samples from each cluster we can visually observe a clear distinction between clusters and similarity in layout characteristics within each cluster. 
 
 
 #### Future Work and Open Questions
